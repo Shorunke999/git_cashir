@@ -20,7 +20,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 Route::get('/payment/callback', [PaymentController::class, 'handleGatewayCallback']);//pystack callback
-Route::get('/rave/callback', [PaymentController::class, 'callback'])->name('callback');//flutterwave callback
+Route::post('/rave/callback', [PaymentController::class, 'callback'])->name('callback');//flutterwave callback
 
 Route::get('/dashboard', function () {
     return view('dashboard');

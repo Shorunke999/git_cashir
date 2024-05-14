@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('payment_models', function (Blueprint $table) {
             $table->id();
+            $table->string('payer_email');
+            $table->integer('amount');
             $table->timestamps();
         });
     }

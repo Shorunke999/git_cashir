@@ -1,27 +1,39 @@
 <?php
 
 namespace App\Http\Controllers;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Str;
+
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Unicodeveloper\Paystack\Facades\Paystack as Paystack;
 use KingFlamez\Rave\Facades\Rave as Flutterwave;
+use League\CommonMark\Reference\Reference;
 
 class PaymentController extends Controller
 {
     public function redirectToGateway(Request $request)
     {
+
         if($request->provider == 'paystack'){
-
             try{
-                $data = array(
-                    "amount" => $request->amount,
-                    "reference" => Paystack::genTranxRef(),
-                    "email" => auth()->user()->email,
-                    "currency" => "NGN",
-                );
+                $uuid = Str::uuid()->toString();
+                $reference = substr($uuid, 0, 8);
+                //dd();
+                $response = Http::withHeaders([
+                    'Authorization' => 'Bearer ' . env('PAYSTACK_SECRET_KEY'),
+                    'Content-Type' => 'application/json',
+                ])->post('https://api.paystack.co/transaction/initialize', [
+                    'amount' => $request->amount * 100,
+                    'email' =>auth()->user()->email,
+                    'reference' => $reference
+                ]);
+                    $res_body = json_decode($response->getBody()->getContents(), true);
+                if($res_body == true){
 
-                return Paystack::getAuthorizationUrl($data)->redirectNow();
+                    return Redirect::away($res_body['data']['authorization_url']);
+                }
             }catch(\Exception $e) {
                 return Redirect::back()->withMessage(['msg'=>'The paystack token has expired. Please refresh the page and try again.', 'type'=>'error']);
             }
@@ -94,13 +106,15 @@ class PaymentController extends Controller
      * Obtain Paystack payment information
      * @return void
      */
-    public function handleGatewayCallback()
+    public function handleGatewayCallback(Request $request)
     {
-        $paymentDetails = Paystack::getPaymentData();
+        $data =  $request->all();
 
-        dd($paymentDetails);
-        // Now you have the payment details,
-        // you can store the authorization_code in your db to allow for recurrent subscriptions
-        // you can then redirect or do whatever you want
+        dd($data);
+        //important data to save
+        //user email
+        //reference number
+        //amount
+        //time of payment
     }
 }
