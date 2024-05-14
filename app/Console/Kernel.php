@@ -4,6 +4,7 @@ namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use App\Jobs\DowntimeJob;
 
 class Kernel extends ConsoleKernel
 {
@@ -12,8 +13,11 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-         $schedule->command('inspire')->hourly();
-    }
+        //we could use platforms such as pingdom but webhook services are not free
+        //use redis cache to store the data gotten from the api call and lock the action
+         $schedule->job(new DowntimeJob)->everyFiveMinutes();
+
+}
 
     /**
      * Register the commands for the application.

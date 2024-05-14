@@ -27,12 +27,22 @@
 
                                 <!-- Payment Provider Selection Dropdown -->
                                 <div class="mt-4">
-                                    <label for="paymentProvider" class="block font-medium text-gray-700">Select Payment Provider</label>
-                                    <select name="provider" id="paymentProvider" class="mt-1 block  rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                                    @if ($Paystack_Downtime == true)
+                                        <h1> Paystack server is down for the moment</h1>
+                                        <label for="paymentProvider" class="block font-medium text-gray-700">Select Payment Provider</label>
+                                        <select name="provider" id="paymentProvider" class="mt-1 block  rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                                            <option value="flutterwave">Flutter Wave</option>
+                                            <!-- Add more options as needed -->
+                                        </select>
+                                    @else
+                                        <label for="paymentProvider" class="block font-medium text-gray-700">Select Payment Provider</label>
+                                        <select name="provider" id="paymentProvider" class="mt-1 block  rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
                                         <option value="paystack">Paystack</option>
                                         <option value="flutterwave">Flutter Wave</option>
-                                        <!-- Add more options as needed -->
-                                    </select>
+                                            <!-- Add more options as needed -->
+                                        </select>
+                                    @endif
+
                                 </div>
                                 <p  class="mt-4">
                                     <button class="btn btn-success btn-lg btn-block bg-blue-600" type="submit" value="Pay Now!">
