@@ -27,21 +27,16 @@
 
                                 <!-- Payment Provider Selection Dropdown -->
                                 <div class="mt-4" id="payment_section">
-                                    @if ($Paystack_Downtime == true)
-                                        <h1> Paystack server is down for the moment</h1>
-                                        <label for="paymentProvider" class="block font-medium text-gray-700">Select Payment Provider</label>
+                                    <label for="paymentProvider" class="block font-medium text-gray-700">Select Payment Provider</label>
+                                    @if ($data_count > 1)
                                         <select name="provider" id="paymentProvider" class="mt-1 block  rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                                            <option value="paystack">Paystack</option>
                                             <option value="flutterwave">Flutter Wave</option>
-                                            <!-- Add more options as needed -->
                                         </select>
                                     @else
-                                        <label for="paymentProvider" class="block font-medium text-gray-700">Select Payment Provider</label>
-                                        <select name="provider" id="paymentProvider" class="mt-1 block  rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
-                                        <option value="paystack">Paystack</option>
-                                        <option value="flutterwave">Flutter Wave</option>
-                                            <!-- Add more options as needed -->
-                                        </select>
+
                                     @endif
+                                        <!-- Add more options as needed -->
 
                                 </div>
                                 <p  class="mt-4">
@@ -57,25 +52,4 @@
         </div>
     </div>
 </x-app-layout>
-<script>
-   Echo.channel('paystackChannel').listen('MyEvent', (payload) => {
-    const uiSection = document.getElementById('payment_section');
 
-    if (!payload.newData) {
-        uiSection.innerHTML = `
-            <label for="paymentProvider" class="block font-medium text-gray-700">Select Payment Provider</label>
-            <select name="provider" id="paymentProvider" class="mt-1 block rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
-                <option value="paystack">Paystack</option>
-                <option value="flutterwave">Flutter Wave</option>
-            </select>`;
-    }else {
-        uiSection.innerHTML =  `
-            <h1>Paystack platform is not Active at the moment</h1>
-            <label for="paymentProvider" class="block font-medium text-gray-700">Select Payment Provider</label>
-            <select name="provider" id="paymentProvider" class="mt-1 block rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
-
-                <option value="flutterwave">Flutter Wave</option>
-            </select>`;
-    }
-});
-</script>

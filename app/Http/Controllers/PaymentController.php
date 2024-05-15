@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 
+use App\Events\DowntimeEvent;
+
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
@@ -38,31 +40,7 @@ class PaymentController extends Controller
                 return Redirect::back()->withMessage(['msg'=>'The paystack token has expired. Please refresh the page and try again.', 'type'=>'error']);
             }
         }else{
-            $reference = Flutterwave::generateReference();
 
-            // Enter the details of the payment
-            $data = [
-                'payment_options' => 'card,banktransfer',
-                'amount' =>$request->amount,
-                'email' => $request->email,
-                'tx_ref' => $reference,
-                'currency' => "NGN",
-                'redirect_url' => route('callback'),
-                'customer' => [
-                    'email' => request()->email,
-                    "phone_number" => request()->phone,
-                    "name" => request()->name
-                ],
-            ];
-
-            $payment = Flutterwave::initializePayment($data);
-
-
-            if ($payment['status'] !== 'success') {
-                return redirect()->back()->with('msg','It happens the payment process is not going through');
-            }
-
-            return redirect($payment['data']['link']);
         }
 
     }
