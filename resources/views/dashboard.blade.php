@@ -10,16 +10,15 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 @if (session('msg'))
                     <div>
-                        session('msg')
+                        {{session('msg')}}
                     </div>
-                @session
-
                 @endif
                 <div class="p-6 text-gray-900"><h1>Active Payment system platforms</h1>
                     <div class="flex items-center space-x-4 mt-4">
                         <a href="{{route('change_payment',['status' => 'BothPlatforms'])}}">
                             <button id="bothBtn" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-full focus:outline-none">Activate both payment platform</button>
                         </a>
+
                         <a href="{{route('change_payment', ['status' => 'Flutterwave'])}}">
                             <button id="oneBtn" class="bg-green-400 hover:bg-green-500 text-white font-bold py-2 px-4 rounded-full focus:outline-none">Flutter wave only</button>
                         </a>

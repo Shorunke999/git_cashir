@@ -30,7 +30,7 @@ Route::middleware('auth')->group(function () {
     // payment route for paystack
     Route::post('/pay', [App\Http\Controllers\PaymentController::class, 'redirectToGateway'])->name('pay');
 
-    Route::get('/updatePayment/{status}',[Controller::class,'updatePayment'])->name('change_payment');
+    Route::get('/updatePayment/{status?}',[Controller::class,'updatePayment'])->name('change_payment');
 
     //user dashboard rout
     Route::get('/DashboardUser',[Controller::class,'dashboard'])->name('userDashboard');

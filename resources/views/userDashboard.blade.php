@@ -30,13 +30,23 @@
                                     <label for="paymentProvider" class="block font-medium text-gray-700">Select Payment Provider</label>
                                     @if ($data_count > 1)
                                         <select name="provider" id="paymentProvider" class="mt-1 block  rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
-                                            <option value="paystack">Paystack</option>
                                             <option value="flutterwave">Flutter Wave</option>
+                                            <option value="paystack">Paystack</option>
                                         </select>
                                     @else
+                                        @foreach ($data as $data )
+                                            @if ($data->platform_name === 'Flutterwave')
+                                                <select name="provider" id="paymentProvider" class="mt-1 block  rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                                                    <option value="flutterwave">Flutter Wave</option>
+                                                </select>
+                                            @else
+                                                <select name="provider" id="paymentProvider" class="mt-1 block  rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                                                    <option value="paystack">Paystack</option>
+                                                </select>
+                                            @endif
+                                        @endforeach
 
                                     @endif
-                                        <!-- Add more options as needed -->
 
                                 </div>
                                 <p  class="mt-4">
