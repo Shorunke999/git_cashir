@@ -5,21 +5,24 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 
 use App\Events\DowntimeEvent;
-
-
+use App\Jobs\PaystackkVerification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Response;
 use Unicodeveloper\Paystack\Facades\Paystack as Paystack;
 use KingFlamez\Rave\Facades\Rave as Flutterwave;
 use League\CommonMark\Reference\Reference;
 
 class PaymentController extends Controller
 {
-    public function redirectToGateway(Request $request)
+    public function initailizePayment(Request $request)
     {
 
         if($request->provider == 'paystack'){
             try{
+
+                //initiating paystack payment
                 $uuid = Str::uuid()->toString();
                 $reference = substr($uuid, 0, 8);
                 //dd();
@@ -40,10 +43,31 @@ class PaymentController extends Controller
                 return Redirect::back()->withMessage(['msg'=>'The paystack token has expired. Please refresh the page and try again.', 'type'=>'error']);
             }
         }else{
-
+            //initiaing flutterwave payment
         }
 
     }
+     /**
+     * Obtain Paystack payment information
+     * @return void
+     */
+    public function Paystackwebhook(Request $request)
+    {
+        $paystackSignature = $request->header('X-Paystack-Signature');
+        $secret = env('PAYSTACK_SECRET_KEY');
+        $expectedSignature = hash_hmac('sha512', $request->getContent(), $secret);
+
+        if(hash_equals($expectedSignature, $paystackSignature)){
+             // Process the webhook event
+            $event = $request->all(); // Retrieve the request body
+
+            // Do something with the event (e.g., handle payment success, update database, etc.)
+
+            Log::info('Paystack webhook received', $event);
+            //Response::make('Webhook processed successfully', 200);
+            return redirect()->to('/')->with('msg', 'Payment Successful');
+    }
+}
 
 
     /**
@@ -80,19 +104,4 @@ class PaymentController extends Controller
 
     }
 
-    /**
-     * Obtain Paystack payment information
-     * @return void
-     */
-    public function handleGatewayCallback(Request $request)
-    {
-        $data =  $request->all();
-
-        dd($data);
-        //important data to save
-        //user email
-        //reference number
-        //amount
-        //time of payment
-    }
 }
