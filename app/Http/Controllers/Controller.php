@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\platformStatusResources;
+use App\Models\PaymentRecords;
 use App\Models\PlatformStatus;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -18,7 +19,7 @@ class Controller extends BaseController
         $active_no = $active_platform->count();
             return view('userDashboard',[
                 'data' => $active_platform,
-                'data_count' => $active_no
+                'data_count' => $active_no,
             ]);
 
     }

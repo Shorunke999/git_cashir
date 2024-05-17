@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('Payment_platform');
             $table->string('reference');
             $table->integer('amount');
+            $table->integer('fees');
             $table->timestamps();
         });
     }
