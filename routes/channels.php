@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Broadcast;
 |
 */
 
-Broadcast::channel('paystackChannel', function () {
+Broadcast::channel('channel-name', function () {
     return true;
 });
 

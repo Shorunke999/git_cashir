@@ -25,7 +25,7 @@ Route::get('/', function () {
 
 //callback urls for payment
 Route::post('/payment/webhook', [PaymentController::class, 'Paystackwebhook']);//paystack webhook
-Route::get('/Monny_urddev/webhook', [PaymentController::class, 'Monnywebhook']);//Monny callback
+Route::post('/Monny/webhook', [PaymentController::class, 'Monnywebhook']);//Monny callback
 
 Route::get('/Redirect',function(){
     return view('welcome')->with('msg','payment processed...');

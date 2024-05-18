@@ -6,7 +6,6 @@ use Illuminate\Support\Str;
 
 use App\Events\DowntimeEvent;
 use App\Jobs\PaymentProcessing;
-use App\Jobs\PaystackkVerification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
@@ -47,9 +46,13 @@ class PaymentController extends Controller
      */
     public function Paystackwebhook(Request $request)
     {
+
         $paystackSignature = $request->header('X-Paystack-Signature');
         $secret = env('PAYSTACK_SECRET_KEY');
         $expectedSignature = hash_hmac('sha512', $request->getContent(), $secret);
+        Log::info('Monnify webhook received:', ['request' => $request]);
+        //Log::info('Validator:', $validator);
+        Log::info('Monnify Signature:', ['signature' => $expectedSignature]);
 
         if(hash_equals($expectedSignature, $paystackSignature)){
             if ($request->event == "charge.success") {
@@ -57,6 +60,7 @@ class PaymentController extends Controller
                     'provider' => 'paystack',
                         'data' => $request
                 ];
+                Log::info('request',$request);
                 PaymentProcessing::dispatch($data);
             }
 
@@ -122,12 +126,18 @@ class PaymentController extends Controller
      */
     public function Monnywebhook(Request $request)
     {
-        $clientSecret = env('MONNIFY_CLIENT_SECRET');
+        $clientSecret = env('MONNY_SECRET_KEY');
         $monnifySignature = $request->header('monnify-signature');
         $requestBody = $request->getContent();
         $validator = hash_hmac('sha512', $requestBody, $clientSecret);
+        Log::info('Monnify webhook received:', ['request' => $request]);
         if(hash_equals($validator, $monnifySignature)){
             Log::info('Monnify webhook received:', $request);
+            $data = [
+                'provider' => 'monny',
+                    'data' => $request
+            ];
+            PaymentProcessing::dispatch($data);
             return response()->json(['message' => 'Webhook received successfully'], 200);
         }
     }

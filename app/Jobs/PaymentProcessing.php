@@ -9,11 +9,12 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 
 class PaymentProcessing implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
-    public $data;
+    protected $data;
     /**
      * Create a new job instance.
      */
@@ -28,6 +29,9 @@ class PaymentProcessing implements ShouldQueue
     public function handle(): void
     {
         if($this->data == 'paystack'){
+            Log::info('workiing',[
+                'data' => 'working'
+            ]);
             PaymentRecords::create([
                 'user_email'=>$this->data->customer->email,
                 'Payment_platform'=> 'paystack',
@@ -38,7 +42,7 @@ class PaymentProcessing implements ShouldQueue
         }else{
             PaymentRecords::create([
                 'user_email'=>$this->data->customer->email,
-                'Payment_platform'=> 'paystack',
+                'Payment_platform'=> 'monny',
                 'reference' =>$this->data->data->reference,
                 'amount' =>$this->data->data->amount,
                 'fees' => $this->data->data->fees
