@@ -17,6 +17,7 @@ use CustomTransactionHashUtil;
 
 class PaymentController extends Controller
 {
+    //initialize payment
     public function initailizePayment(Request $request)
     {
         //initiating paystack payment
