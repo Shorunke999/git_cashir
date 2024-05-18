@@ -33,7 +33,7 @@ class DatabaseSeeder extends Seeder
             'status' => 1
         ]);
         PlatformStatus::create([
-            'platform_name' => 'flutterwave',
+            'platform_name' => 'monny',
             'status' => 1
         ]);
         // \App\Models\User::factory(10)->create();
