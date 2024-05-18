@@ -30,20 +30,20 @@ class Controller extends BaseController
             PlatformStatus::where('status', 0)->update(['status' => 1]);
             return Redirect::back()->with('msg','Changes made');
 
-        }elseif($status === 'Flutterwave'){
+        }elseif($status === 'Monny'){
             //query
-                PlatformStatus::whereIn('platform_name', ['Flutterwave', 'Paystack'])
+                PlatformStatus::whereIn('platform_name', ['Monny', 'Paystack'])
                 ->update(['status' => DB::raw('CASE
-                    WHEN platform_name = "Flutterwave" THEN 1
+                    WHEN platform_name = "Monny" THEN 1
                     WHEN platform_name = "Paystack" THEN 0
                 END')]);
 
-            return Redirect::back()->with('msg','Payment platform is updated to Flutterwave');
+            return Redirect::back()->with('msg','Payment platform is updated to Monny');
         }else{
             //query
-            PlatformStatus::whereIn('platform_name', ['Flutterwave', 'Paystack'])
+            PlatformStatus::whereIn('platform_name', ['Monny', 'Paystack'])
             ->update(['status' => DB::raw('CASE
-                WHEN platform_name = "Flutterwave" THEN 0
+                WHEN platform_name = "Monny" THEN 0
                 WHEN platform_name = "Paystack" THEN 1
             END')]);
 

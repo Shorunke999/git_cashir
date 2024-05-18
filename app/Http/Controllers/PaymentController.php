@@ -6,6 +6,7 @@ use Illuminate\Support\Str;
 
 use App\Events\DowntimeEvent;
 use App\Jobs\PaymentProcessing;
+use App\Models\PaymentRecords;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
@@ -17,7 +18,7 @@ use CustomTransactionHashUtil;
 
 class PaymentController extends Controller
 {
-    //initialize payment
+    //initialize paystack payment
     public function initailizePayment(Request $request)
     {
         //initiating paystack payment
@@ -26,6 +27,7 @@ class PaymentController extends Controller
 
         if($request->provider == 'paystack'){
             try{
+                //dd('working paystack');
                 $res_body = $this->Paystack($request,$reference);
                  return Redirect::away($res_body['data']['authorization_url']);
             }catch(\Exception $e) {
@@ -33,6 +35,7 @@ class PaymentController extends Controller
             }
         }else{
             try{
+                //dd('working Monny');
                  $res_body = $this->Monny($request,$reference);
                 return redirect()->away($res_body["responseBody"]["checkoutUrl"]);
             }catch(\Exception $e){
@@ -62,7 +65,8 @@ class PaymentController extends Controller
                         'data' => $request
                 ];
                 Log::info('request',$request);
-                PaymentProcessing::dispatch($data);
+                $this->saveRecord($data);
+                //PaymentProcessing::dispatch($data);
             }
 
             // Send a 200 response back to Paystack
@@ -138,9 +142,21 @@ class PaymentController extends Controller
                 'provider' => 'monny',
                     'data' => $request
             ];
-            PaymentProcessing::dispatch($data);
+            //PaymentProcessing::dispatch($data);
+            $this->saveRecord($data);
             return response()->json(['message' => 'Webhook received successfully'], 200);
         }
+    }
+
+    private function saveRecord($data):void
+    {
+        PaymentRecords::create([
+            'user_email'=>$data->customer->email,
+            'Payment_platform'=> $data->provider,
+            'reference' =>$data->data->reference,
+            'amount' =>$data->data->amount,
+            'fees' => $data->data->fees
+        ]);
     }
 
 }

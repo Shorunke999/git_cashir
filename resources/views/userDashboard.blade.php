@@ -30,14 +30,14 @@
                                     <label for="paymentProvider" class="block font-medium text-gray-700">Select Payment Provider</label>
                                     @if ($data_count > 1)
                                         <select name="provider" id="paymentProvider" class="mt-1 block  rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
-                                            <option value="flutterwave">Monny</option>
+                                            <option value="monnny">Monny</option>
                                             <option value="paystack">Paystack</option>
                                         </select>
                                     @else
                                         @foreach ($data as $data )
-                                            @if ($data->platform_name === 'Flutterwave')
+                                            @if ($data->platform_name === 'monny')
                                                 <select name="provider" id="paymentProvider" class="mt-1 block  rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
-                                                    <option value="flutterwave">Monny</option>
+                                                    <option value="monny">Monny</option>
                                                 </select>
                                             @else
                                                 <select name="provider" id="paymentProvider" class="mt-1 block  rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
