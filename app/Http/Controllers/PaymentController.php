@@ -54,19 +54,17 @@ class PaymentController extends Controller
         $paystackSignature = $request->header('X-Paystack-Signature');
         $secret = env('PAYSTACK_SECRET_KEY');
         $expectedSignature = hash_hmac('sha512', $request->getContent(), $secret);
-        Log::info('Monnify webhook received:', ['request' => $request]);
-        //Log::info('Validator:', $validator);
-        Log::info('Monnify Signature:', ['signature' => $expectedSignature]);
 
         if(hash_equals($expectedSignature, $paystackSignature)){
             if ($request->event == "charge.success") {
                 $data = [
                     'provider' => 'paystack',
-                        'data' => $request
+                        'data' => $request->data
                 ];
-                Log::info('request',$request);
-                $this->saveRecord($data);
-                //PaymentProcessing::dispatch($data);
+                Log::info('request:',['request Paystack' => $request->data]);
+                PaymentProcessing::dispatch($data);
+            }else{
+                return redirect()->route('userDashboard')->with('msg','Payment was not succesfull');
             }
 
             // Send a 200 response back to Paystack
@@ -134,16 +132,24 @@ class PaymentController extends Controller
         $clientSecret = env('MONNY_SECRET_KEY');
         $monnifySignature = $request->header('monnify-signature');
         $requestBody = $request->getContent();
+            Log::info('Monnify webhook received:', ['monny' => $request,'requestbody' => $requestBody]);
+
         $validator = hash_hmac('sha512', $requestBody, $clientSecret);
-        Log::info('Monnify webhook received:', ['request' => $request]);
         if(hash_equals($validator, $monnifySignature)){
-            Log::info('Monnify webhook received:', $request);
             $data = [
                 'provider' => 'monny',
                     'data' => $request
             ];
+            PaymentRecords::create([
+                'user_email'=>$request->customer->email,
+                'Payment_platform'=> 'monny',
+                'reference' =>$request->data->reference,
+                'amount' =>$request->data->amount,
+                'fees' => $request->data->fees
+            ]);
+           // dispatch(new PaymentProcessing($data));
             //PaymentProcessing::dispatch($data);
-            $this->saveRecord($data);
+            //$this->saveRecord($data);
             return response()->json(['message' => 'Webhook received successfully'], 200);
         }
     }

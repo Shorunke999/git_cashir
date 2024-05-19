@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\PaymentRecords;
+use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -14,7 +15,7 @@ use Illuminate\Support\Facades\Log;
 class PaymentProcessing implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
-    protected $data;
+    public $data;
     /**
      * Create a new job instance.
      */
@@ -28,25 +29,35 @@ class PaymentProcessing implements ShouldQueue
      */
     public function handle(): void
     {
-        if($this->data == 'paystack'){
-            Log::info('workiing',[
-                'data' => 'working'
-            ]);
+        try{
+        if (!isset($this->data['provider']) || !isset($this->data['data'])) {
+            Log::error('Invalid data structure', ['data' => $this->data]);
+            return;
+        }
+
+        $provider = $this->data['provider'];
+        $transactionData = $this->data['data'];
+
+        if($provider == 'paystack'){
+            Log::info('working', ['data' => 'working']);
             PaymentRecords::create([
-                'user_email'=>$this->data->customer->email,
-                'Payment_platform'=> 'paystack',
-                'reference' =>$this->data->data->reference,
-                'amount' =>$this->data->data->amount,
-                'fees' => $this->data->data->fees
+                'user_email' => $transactionData['customer']['email'],
+                'Payment_platform' => 'paystack',
+                'reference' => $transactionData['reference'],
+                'amount' => $transactionData['amount'],
+                'fees' => $transactionData['fees']
             ]);
-        }else{
+        } else {
             PaymentRecords::create([
-                'user_email'=>$this->data->customer->email,
-                'Payment_platform'=> 'monny',
-                'reference' =>$this->data->data->reference,
-                'amount' =>$this->data->data->amount,
-                'fees' => $this->data->data->fees
+                'user_email' => $transactionData['customer']['email'],
+                'Payment_platform' => 'monny',
+                'reference' => $transactionData['reference'],
+                'amount' => $transactionData['amount'],
+                'fees' => $transactionData['fees']
             ]);
         }
+    } catch (Exception $e) {
+        Log::error('Error saving payment to database: ' . $e->getMessage(), ['data' => $this->data]);
+    }
     }
 }

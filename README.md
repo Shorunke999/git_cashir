@@ -18,7 +18,7 @@ php artisan db:seed
 ## Clone Repository
 Clone the repository using the following command:
 ```bash
-git clone https://github.com/username/repository-name.git
+git clone https://github.com/Shorunke999/git_cashir.git
 ```
 
 
@@ -72,6 +72,7 @@ and save changes.
 #Start server
 ```bash
 php artisan serve   //Start server
+php artisan queue:work   //start job to record payments data from webhook
 npm run dev         //To start vite
 Assumming npm is installed
 ```
