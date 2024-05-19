@@ -48,12 +48,13 @@ class PaymentProcessing implements ShouldQueue
                 'fees' => $transactionData['fees']
             ]);
         } else {
+            Log::info('working',['maybe' => 'free']);
             PaymentRecords::create([
                 'user_email' => $transactionData['customer']['email'],
                 'Payment_platform' => 'monny',
-                'reference' => $transactionData['reference'],
-                'amount' => $transactionData['amount'],
-                'fees' => $transactionData['fees']
+                'reference' => $transactionData["product"]['reference'],
+                'amount' => $transactionData['amountPaid'],
+                'fees' => $transactionData['fees'] ?? 0
             ]);
         }
     } catch (Exception $e) {

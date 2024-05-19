@@ -30,32 +30,36 @@
                         <a href="{{route('userDashboard')}}" class="hover:bg-gray-300 rounded-full px-10 ">Make Payment</a>
                     </div>
                 </div>
-                <div class="mt-6 ">
-                    <table>
-                        <tr>
-                            <th class="px-9">Email</th>
-                            <th class="px-9">Reference Number</th>
-                            <th class="px-9">Amount</th>
-                            <th class="px-9">Payment platform</th>
-                            <th class="px-9">Fee</th>
-                            <th class="px-9">Timespamp</th>
-                            <th class="px-9">Delete Record</th>
-                        </tr>
-                        @foreach ($records  as $record )
-                        <tr>
-                            <td> $record->user_email</td>
-                            <td> $record->reference</td>
-                            <td> $record->amount</td>
-                            <td> $record->Payment_platform</td>
-                            <td> $record->fees</td>
-                            <td> $record->updated_at</td>
-                            <td>
-                                <a href="{{url('/deleteRecord',$record->id)}}" class="bg-red-500">Delete</a>
-                            </td>
-                        </tr>
-
-                        @endforeach
+                <div class="mt-10 ">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead>
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Reference Number</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Payment Platform</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fee</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Timestamp</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Delete Record</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            @foreach ($records as $record)
+                            <tr class="text-center">
+                                <td class="px-6 py-4 whitespace-nowrap">{{ $record->user_email }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap">{{ $record->reference }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap">{{ $record->amount }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap">{{ $record->Payment_platform }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap">{{ $record->fees }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap">{{ $record->updated_at }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <a href="{{ url('/deleteRecord', $record->id) }}" class="text-red-600 hover:text-red-900">Delete</a>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
                     </table>
+
                 </div>
             </div>
 

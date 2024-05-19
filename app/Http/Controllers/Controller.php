@@ -10,13 +10,21 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Http\Request;
 
 class Controller extends BaseController
 {
     use AuthorizesRequests, ValidatesRequests;
-    public function dashboard(){
+    public function dashboard(Request $request){
         $active_platform = PlatformStatus::where('status' ,1)->get();
         $active_no = $active_platform->count();
+        $message =$request->query('message');
+        if($message){
+            return view('userDashboard',[
+                'data' => $active_platform,
+                'data_count' => $active_no,
+            ])->with('msg',$message);
+        }
             return view('userDashboard',[
                 'data' => $active_platform,
                 'data_count' => $active_no,
@@ -50,5 +58,11 @@ class Controller extends BaseController
             return Redirect::back()->with('msg','Payment platform is updated to Paystack');
         }
 
+    }
+    public function destroy($id){
+        $data = PaymentRecords::find($id);
+        dd($data);
+        $data->delete();
+        Redirect::back()->with('msg','Record Deleted');
     }
 }

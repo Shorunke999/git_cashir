@@ -34,9 +34,7 @@ Route::get('/Redirect',function(){
 //Admin Dashboard
 Route::get('/dashboard', function () {
     $records = PaymentRecords::all();
-    return view('dashboard',[
-        'records' =>$records
-    ]);
+    return view('dashboard',compact('records'));
 })->middleware(['auth', 'verified','Admin'])->name('dashboard');
 
 
@@ -44,11 +42,7 @@ Route::get('/dashboard', function () {
 
 Route::middleware('auth')->group(function () {
     //delete records
-    Route::get('/deleteRecord/{id}',function($id){
-        $data = PaymentRecords::find($id);
-        $data->delete();
-        Redirect::back()->with('msg','Record Deleted');
-    });
+    Route::get('/deleteRecord/{id}',[Controller::class ,'destroy']);
     // payment route for paystack
     Route::post('/pay', [App\Http\Controllers\PaymentController::class, 'initailizePayment'])->name('pay');
 
