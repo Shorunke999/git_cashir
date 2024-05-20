@@ -45,16 +45,16 @@ class PaymentProcessing implements ShouldQueue
                 'Payment_platform' => 'paystack',
                 'reference' => $transactionData['reference'],
                 'amount' => $transactionData['amount'],
-                'fees' => $transactionData['fees']
+                'fees' => $transactionData['fees'] ?? 0
             ]);
         } else {
-            Log::info('working',['maybe' => 'free']);
+            Log::info('working',['maybe' =>$this->data]);
             PaymentRecords::create([
-                'user_email' => $transactionData['customer']['email'],
+                'user_email' => $this->data['customer']['email'],
                 'Payment_platform' => 'monny',
-                'reference' => $transactionData["product"]['reference'],
-                'amount' => $transactionData['amountPaid'],
-                'fees' => $transactionData['fees'] ?? 0
+                'reference' => $this->data["paymentReference"],
+                'amount' => $this->data['amountPaid'],
+                'fees' => $this->data['fees'] ?? 0
             ]);
         }
     } catch (Exception $e) {

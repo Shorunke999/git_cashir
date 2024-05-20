@@ -14,9 +14,9 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 flex justify-center items-center">
                     <div class="w-full max-w-md">
-                        @if (session('msg'))
+                        @if($msg)
                             <div class="mb-4 p-4 bg-green-100 text-green-700 rounded">
-                                {{ session('msg') }}
+                                {{$msg }}
                             </div>
                         @endif
                         <form method="POST" action="{{ route('pay') }}" class="">
@@ -33,14 +33,14 @@
                                 <label for="paymentProvider" class="block text-gray-700 font-medium mb-2">Select Payment Provider</label>
                                 @if ($data_count > 1)
                                     <select name="provider" id="paymentProvider" class="block w-full mt-1 px-3 py-2 border rounded-md shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
-                                        <option value="monny">Monny</option>
+                                        <option value="monny">Monnify</option>
                                         <option value="paystack">Paystack</option>
                                     </select>
                                 @else
                                     @foreach ($data as $data)
                                         @if ($data->platform_name === 'monny')
                                             <select name="provider" id="paymentProvider" class="block w-full mt-1 px-3 py-2 border rounded-md shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
-                                                <option value="monny">Monny</option>
+                                                <option value="monny">Monnify</option>
                                             </select>
                                         @else
                                             <select name="provider" id="paymentProvider" class="block w-full mt-1 px-3 py-2 border rounded-md shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">

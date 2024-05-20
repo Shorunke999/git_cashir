@@ -19,7 +19,8 @@
                             <button  class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-full focus:outline-none">Activate both payment platform</button>
                         </a>
                         <a href="{{route('change_payment', ['status' => 'Monny'])}}">
-                            <button  class="bg-green-400 hover:bg-green-500 text-white font-bold py-2 px-4 rounded-full focus:outline-none">Monny only</button>
+                            <button  class="bg-green-400 hover:bg-green-500 text-white font-bold py-2 px-4 rounded-full
+                             focus:outline-none">Monnify only</button>
                         </a>
 
                         <a href="{{route('change_payment',['status' => 'Paystack'])}}">

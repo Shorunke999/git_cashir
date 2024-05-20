@@ -23,7 +23,8 @@ class Controller extends BaseController
             return view('userDashboard',[
                 'data' => $active_platform,
                 'data_count' => $active_no,
-            ])->with('msg',$message);
+                'msg' => $message
+            ]);
         }
             return view('userDashboard',[
                 'data' => $active_platform,
@@ -59,7 +60,7 @@ class Controller extends BaseController
         }
 
     }
-    public function destroy($id){
+    public function destroyRecords($id){
         $data = PaymentRecords::find($id);
         dd($data);
         $data->delete();

@@ -11,6 +11,9 @@ export default {
 
     theme: {
         extend: {
+            backgroundImage: {
+                'custom-background': "url('/public/images/dashboardimage.jpg')",
+              },
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
             },

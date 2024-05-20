@@ -42,7 +42,7 @@ Route::get('/dashboard', function () {
 
 Route::middleware('auth')->group(function () {
     //delete records
-    Route::get('/deleteRecord/{id}',[Controller::class ,'destroy']);
+    Route::get('/deleteRecord/{id}',[Controller::class ,'destroyRecords']);
     // payment route for paystack
     Route::post('/pay', [App\Http\Controllers\PaymentController::class, 'initailizePayment'])->name('pay');
 
