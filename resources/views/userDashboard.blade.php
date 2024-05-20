@@ -14,7 +14,7 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 flex justify-center items-center">
                     <div class="w-full max-w-md">
-                        @if($msg)
+                        @if(isset($msg))
                             <div class="mb-4 p-4 bg-green-100 text-green-700 rounded">
                                 {{$msg }}
                             </div>
@@ -55,6 +55,12 @@
                                 <i class="fa fa-plus-circle fa-lg"></i> Pay Now!
                             </button>
                         </form>
+                        @if (auth()->user()->userType == 1)
+                            <div class="mt-5">
+                                <a href="{{route('dashboard')}}" class="text-red-300">Back to admin Dashboard</a>
+                            </div>
+                        @endif
+
                     </div>
                 </div>
             </div>

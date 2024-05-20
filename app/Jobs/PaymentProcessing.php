@@ -52,7 +52,7 @@ class PaymentProcessing implements ShouldQueue
             PaymentRecords::create([
                 'user_email' => $this->data['customer']['email'],
                 'Payment_platform' => 'monny',
-                'reference' => $this->data["paymentReference"],
+                'reference' => $this->data['paymentReference'],
                 'amount' => $this->data['amountPaid'],
                 'fees' => $this->data['fees'] ?? 0
             ]);

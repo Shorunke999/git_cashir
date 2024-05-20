@@ -62,8 +62,7 @@ class Controller extends BaseController
     }
     public function destroyRecords($id){
         $data = PaymentRecords::find($id);
-        dd($data);
         $data->delete();
-        Redirect::back()->with('msg','Record Deleted');
+       return Redirect::back()->with('msg','Record Deleted');
     }
 }

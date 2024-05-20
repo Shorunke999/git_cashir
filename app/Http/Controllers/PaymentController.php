@@ -139,7 +139,7 @@ class PaymentController extends Controller
                 Log::info('payload:',['payload' => $payload]);
                 $data = [
                     'provider' => 'monny',
-                        'data' => $payload["eventData"]
+                        'data' => $payload['eventData']
                 ];
                 PaymentProcessing::dispatch($data);
             // dispatch(new PaymentProcessing($data));
